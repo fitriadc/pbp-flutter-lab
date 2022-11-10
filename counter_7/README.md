@@ -23,7 +23,7 @@ App Name : Counter 7
 
 
 ## SetState() 
-SetState adalah sebuah method dari statefulwidget yang berfungsi untuk memberitahu adanya perubahan internal state. Ketika setState dipanggil maka akan terjadi pembaharuan widget yang dilakukan dengan cara memanggil method build() untuk me-rebuild widget-widget kondisi sebelumnya.
+SetState adalah sebuah method dari statefulwidget yang berfungsi untuk memberitahu adanya perubahan internal state. Ketika setState dipanggil maka akan terjadi pembaharuan widget yang dilakukan dengan cara memanggil method build() untuk me-rebuild widget-widget kondisi sebelumnya. Variabel yang akan berdampak adalah variabel yang berada di dalam fungsi set state
 
 ## Difference Between Const vs Final
 - const adalah variabel immutable yang bersifat konstan dan nilainya harus diketahui saat compile time. Namun setiap kali render bisa dideklarasikan ulang.
