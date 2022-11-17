@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
+import 'package:counter_7/model/budget.dart';
+import 'package:counter_7/widget/drawer.dart';
 import 'package:flutter/material.dart';
-
-import '../widget/drawer.dart';
 
 class AddBudgetFormPage extends StatefulWidget {
   const AddBudgetFormPage({super.key});
@@ -12,183 +11,164 @@ class AddBudgetFormPage extends StatefulWidget {
 
 class _AddBudgetFormPageState extends State<AddBudgetFormPage> {
   final _formKey = GlobalKey<FormState>();
+  DateTime? _date;
   final _nameController = TextEditingController();
-  final _amountController = TextEditingController();
+  final _nominalController = TextEditingController();
   final _typeController = TextEditingController();
   final _dateController = TextEditingController();
-  List<String> listJenis = <String>['Pemasukkan', 'Pengeluaran'];
-  DateTime date = DateTime.now();
-  
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Tambah Budget'),
-        ),
-        drawer: MyDrawer(),
-        body: Container(
-            margin: EdgeInsets.all(20),
-            child: Column(
-              children: [
-
-                // field input Nama
-                TextFormField(
-                  controller: _nameController,
-                  decoration: InputDecoration(
+      appBar: AppBar(
+        title: const Text('Tambah Budget'),
+      ),
+      drawer: MyDrawer(),
+      body: Container(
+        margin: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  // input Nama
+                  TextFormField(
+                    controller: _nameController,
+                    decoration: const InputDecoration(
                       hintText: "Contoh: Beli Sate Pacil",
-                      labelText: "Nama",
-                      icon: const Icon(Icons.title),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5.0))),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Nama tidak boleh kosong';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                // field input Nominal
-                TextFormField(
-                  controller: _amountController,
-                  decoration: InputDecoration(
-                      hintText: "Contoh: 10000",
-                      labelText: "Nominal",
-                      icon: const Icon(Icons.attach_money),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5.0))),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Nominal tidak boleh kosong';
-                    } else if (int.tryParse(value) == null) {
-                      return 'Nominal harus berupa angka';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                // field pilih tipe
-                DropdownButtonFormField<String>(
-                  decoration: const InputDecoration(
-                    labelText: 'Tipe',
-                    border: OutlineInputBorder(),
+                      labelText: "Judul ",
+                      icon: Icon(Icons.title),
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Nama tidak boleh kosong!';
+                      }
+                      return null;
+                    },
                   ),
-                  items: const[
-                    DropdownMenuItem(
-                      value: 'Pemasukan',
-                      child: Text('Pemasukan'),
+                  const SizedBox(height: 16),
+                  // Nominal
+                  TextFormField(
+                    controller: _nominalController,
+                    decoration: const InputDecoration(
+                      labelText: 'Nominal',
+                      hintText: "Contoh: 50000",
+                      icon: Icon(Icons.attach_money),
+                      border: OutlineInputBorder(),
                     ),
-                    DropdownMenuItem(
-                      value: 'Pengeluaran',
-                      child: Text('Pengeluaran'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Nominal tidak boleh kosong!';
+                      } else if (int.tryParse(value) == null) {
+                        return 'Nominal harus berupa angka!';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  // type
+                  DropdownButtonFormField<String>(
+                    decoration: const InputDecoration(
+                      labelText: 'type',
+                      border: OutlineInputBorder(),
                     ),
-                  ],
-                  onChanged: (value) =>
-                      setState(() {
-                        _typeController.text = value!;
-                      }),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Tipe tidak boleh kosong';
-                    }
-                    return null;
-                  },),
-                const SizedBox(height: 16),
-
-              ],
-            )
-        )
+                    items: const [
+                      DropdownMenuItem(
+                        value: 'Pemasukan',
+                        child: Text('Pemasukan'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'Pengeluaran',
+                        child: Text('Pengeluaran'),
+                      ),
+                    ],
+                    onChanged: (value) => setState(() {
+                      _typeController.text = value!;
+                    }),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Type tidak boleh kosong!';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  // Tanggal
+                  TextFormField(
+                    controller: _dateController,
+                    decoration: const InputDecoration(
+                      labelText: 'Tanggal',
+                      border: OutlineInputBorder(),
+                    ),
+                    onTap: () {
+                      chooseDate(context: context);
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Tanggal tidak boleh kosong!';
+                      } else if (DateTime.tryParse(value) == null) {
+                        return 'Tanggal tidak valid!';
+                      }
+                      return null;
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      persistentFooterButtons: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            ElevatedButton(
+              child: const Text('Save'),
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  addBudget(_nameController.text, _nominalController.text,
+                      _typeController.text, _dateController.text);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Data berhasil disimpan'),
+                    ),
+                  );
+                }
+              },
+            ),
+            ElevatedButton(
+              child: const Text('Reset'),
+              onPressed: () {
+                _nameController.clear();
+                _nominalController.clear();
+                _typeController.clear();
+                _dateController.clear();
+              },
+            ),
+          ],
+        ),
+      ],
     );
   }
-  }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Tambah Budget'),
-        ),
-        drawer: MyDrawer(),
-        body: Container(
-            margin: EdgeInsets.all(20),
-            child: Column(
-              children: [
-
-                // field input Nama
-                TextFormField(
-                  controller: _nameController,
-                  decoration: InputDecoration(
-                      hintText: "Contoh: Beli Sate Pacil",
-                      labelText: "Nama",
-                      icon: const Icon(Icons.title),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5.0))),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Nama tidak boleh kosong';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                // field input Nominal
-                TextFormField(
-                  controller: _amountController,
-                  decoration: InputDecoration(
-                      hintText: "Contoh: 10000",
-                      labelText: "Nominal",
-                      icon: const Icon(Icons.attach_money),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5.0))),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Nominal tidak boleh kosong';
-                    } else if (int.tryParse(value) == null) {
-                      return 'Nominal harus berupa angka';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                // field pilih tipe
-                DropdownButtonFormField<String>(
-                  decoration: const InputDecoration(
-                    labelText: 'Tipe',
-                    border: OutlineInputBorder(),
-                  ),
-                  items: const[
-                    DropdownMenuItem(
-                      value: 'Pemasukan',
-                      child: Text('Pemasukan'),
-                    ),
-                    DropdownMenuItem(
-                      value: 'Pengeluaran',
-                      child: Text('Pengeluaran'),
-                    ),
-                  ],
-                  onChanged: (value) =>
-                      setState(() {
-                        _typeController.text = value!;
-                      }),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Tipe tidak boleh kosong';
-                    }
-                    return null;
-                  },),
-                const SizedBox(height: 16),
-
-              ],
-            )
-        )
+  // Fungsi untuk data picker
+  Future<Function()?> chooseDate({required BuildContext context}) async {
+    final date = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2025),
+      lastDate: DateTime(2015),
     );
+    if (date != null) {
+      _dateController.text = date.toString();
+    }
+    return null;
+  }
 }
 
-setState(Null Function() param0) {
-}
+void addBudget(String name, String nominal, String type, String date) {
+  DaftarBudget.daftarBudget
+      .add(Budget(name: name, amount: nominal, type: type, date: date));
 }

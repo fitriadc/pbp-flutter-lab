@@ -1,6 +1,6 @@
 class Budget {
   String name, date,type;
-  int amount;
+  String amount;
 
   Budget({
     required this.name,
@@ -13,7 +13,7 @@ class Budget {
   return name;
   }
 
-  int get getAmount {
+  String get getAmount {
   return amount;
   }
 
