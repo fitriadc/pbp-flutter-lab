@@ -1,5 +1,7 @@
-import 'package:counter_7/counter7.dart';
-import 'package:flutter/material.dart';
+
+import 'package:flutter/cupertino.dart';
+
+import 'counter_7.dart';
 
 void main() {
   runApp(const MyCounter());

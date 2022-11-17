@@ -1,6 +1,7 @@
+import 'package:counter_7/view/counter_7_page.dart';
 import 'package:flutter/material.dart';
 
-import 'counter_7_page.dart';
+
 
 class MyCounter extends StatelessWidget {
   const MyCounter({super.key});

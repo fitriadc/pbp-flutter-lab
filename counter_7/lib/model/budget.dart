@@ -1,17 +1,19 @@
 class Budget {
-  String name, amount, date,type;
+  String name, date,type;
+  int amount;
 
   Budget({
     required this.name,
     required this.amount,
-    required this.date,
     required this.type,
+    required this.date,
+  });
 
   String get getName {
   return name;
   }
 
-  String get getAmount {
+  int get getAmount {
   return amount;
   }
 
@@ -31,7 +33,7 @@ class DaftarBudget{
     daftarBudget.add(budget);
   }
 
-  Budget get getDaftarBudget {
+  List<Budget> get getDaftarBudget {
   return daftarBudget;
   }
 
